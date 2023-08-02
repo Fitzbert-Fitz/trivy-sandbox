@@ -1,0 +1,37 @@
+name: Scan images with trivy
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to scan"
+        required: true
+        default: "dev"
+        type: choice
+        options: ["dev", "tae", "uat", "prd"]
+
+jobs:
+  scan:
+    name: Scan cluster using trivy
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "mockserver/mockserver"
+          format: "sarif"
+          output: "${{github.workspace}}/trivy-k8s-report.sarif"
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: trivy-k8s-report
+          path: ${{github.workspace}}/trivy-k8s-report.sarif
+
+      - name: uload sarif report to github
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{github.workspace}}/trivy-k8s-report.sarif
