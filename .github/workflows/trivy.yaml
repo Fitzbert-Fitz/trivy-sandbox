@@ -14,7 +14,8 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: "mockserver/mockserver"
-          format: "sarif"
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
           output: "${{github.workspace}}/trivy-k8s-report.sarif"
 
       - name: Upload Report
