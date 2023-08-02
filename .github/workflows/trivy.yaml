@@ -16,7 +16,7 @@ jobs:
           image-ref: "mockserver/mockserver"
           format: 'template'
           template: '@/contrib/sarif.tpl'
-          output: "${{github.workspace}}/trivy-k8s-report.sarif"
+          output: "trivy-results.sarif"
 
       - name: Upload Report
         uses: actions/upload-artifact@v2
