@@ -1,18 +1,10 @@
 name: Scan images with trivy
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment to scan"
-        required: true
-        default: "dev"
-        type: choice
-        options: ["dev", "tae", "uat", "prd"]
 
 jobs:
   scan:
     name: Scan cluster using trivy
-    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
